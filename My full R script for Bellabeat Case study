@@ -1,0 +1,509 @@
+install.packages("readr")
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("skimr")
+install.packages("janitor")
+install.packages("ggplot2")
+install.packages("gridExtra")
+install.packages("lubridate")
+install.packages("plotly")
+install.packages("here")
+
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(skimr)
+library(janitor)
+library(ggplot2)
+library(gridExtra)
+library(lubridate)
+library(plotly)
+library(here)
+
+setwd("C:\\Users\\svmbj\\OneDrive\\Documents\\Data Analytics Case Studies\\Data Analytics Real world Capstone projects\\Data Sets Bellabeat CaseStudy\\archive\\Fitabase Data 4.12.16-5.12.16")
+
+dailyActivity <- read_csv("dailyActivity_merged.csv")
+dailySleep <- read_csv("sleepDay_merged.csv")
+weightLog <- read_csv("weightLogInfo_merged.csv")
+hr <- read_csv("heartrate_seconds_merged.csv")
+hourlyIntensities <- read_csv("hourlyIntensities_merged.csv")
+hourly_step <- read.csv("hourlySteps_merged.csv")
+calories <- read.csv("dailyCalories_merged.csv")
+hourlyCalories<-read.csv("hourlyCalories_merged.csv")
+
+glimpse(dailyActivity)
+
+glimpse(hourlyIntensities)
+
+glimpse(hr)
+
+glimpse(dailySleep)
+
+glimpse(weightLog)
+
+glimpse(calories)
+
+glimpse(hourly_step)
+
+glimpse(hourlyCalories)
+colnames(dailySleep)
+skim_without_charts(dailyActivity)
+
+### Starting Data Cleaning & transformation for all the datasets (Data Preparation & Processing)
+
+#To make all comumn names uniform and consistent
+
+clean_names(dailyActivity)
+clean_names(hourlyIntensities)
+clean_names(hr)
+clean_names(dailySleep)
+clean_names(weightLog)
+clean_names(hourlyCalories)
+
+separate(dailySleep,SleepDay,into = c('sleep_date','sleep_time'),sep = ' ')
+clean_names(dailySleep)
+clean_names(dailyActivity)
+clean_names(hourlyIntensities)
+clean_names(hr)
+clean_names(dailySleep)
+clean_names(weightLog)
+clean_names(calories)
+clean_names(hourly_step)
+
+
+#Checking for empty or null values
+sum(is.na(dailyActivity))
+sum(is.na(hourlyIntensities))
+sum(is.na(hr))
+sum(is.na(dailySleep))
+sum(is.na(calories))
+sum(is.na(hourlyCalories))
+sum(is.na(hourly_step))
+
+#We can ignore the NA values in Fat column of weightlog data frame different dates
+sum(is.na(weightLog))
+ 
+#to check for duplicates in all the data frames 
+
+sum(duplicated(dailySleep))
+
+sum(duplicated(dailyActivity))
+
+sum(duplicated(hourlyIntensities))
+
+sum(duplicated(hr))
+
+sum(duplicated(dailySleep))
+
+sum(duplicated(weightLog))
+
+sum(duplicated(calories))
+
+sum(duplicated(hourly_step))
+
+sum(duplicated(hourlyCalories))
+
+
+dailySleep <- dailySleep[!duplicated(dailySleep), ]
+sum(duplicated(dailySleep))
+
+#Converting  one date format to another and thus keeping one same format for consistency & ease
+#for dailyActivity data frame
+dailyActivity$Ymd <- as.Date(mdy(dailyActivity$ActivityDate))
+
+#for calories data frame 
+calories$Ymd <- as.Date(mdy(calories$ActivityDay))
+View(calories)
+
+#for hourlycalories data frame
+
+hourlyCalories$time <- format(hourlyCalories$ActivityHour, format="%H:%M:%S")
+hourlyCalories$date <- format(hourlyCalories$ActivityHour, format = "%m/%d/%y")
+head(hourlyCalories)
+View(hourlyCalories)
+hourlyCalories= subset(hourlyCalories, select = -c(Ymd,hms) )
+View(hourlyCalories)
+
+
+
+
+#Convert ActivityDate column into date format and add a column for day of the week:
+dailyActivity <- dailyActivity %>% mutate( Weekday = weekdays(as.Date(ActivityDate, "%m/%d/%Y")))
+View(dailyActivity)
+
+#for dailySleep data frame 
+dailySleep$Ymd <- as.Date(mdy_hms(dailySleep$SleepDay))
+glimpse(dailySleep)
+str(dailySleep)
+View(dailySleep)
+
+#for weightLog data frame 
+weightLog$Ymd <- as.Date(mdy_hms(weightLog$Date))
+View(weightLog)
+
+# for hourly_step data frame
+
+hourly_step$Ymd <- as.Date(mdy_hms(hourly_step$ActivityHour))
+View(hourly_step)
+
+
+View(hr)
+
+# for heart rate data frame (hr)
+hr$Ymd <- as.Date(mdy_hms(hr$Time))
+view(hr)
+View(hr)
+glimpse(hr)
+
+# for hearlyIntensities data frame
+hourlyIntensities$Ymd <- as.Date(mdy_hms(hourlyIntensities$ActivityHour))
+View(hourlyIntensities)
+
+#Separating the datetime combined column into Date & Time column separately for all data frames
+
+#1. for hr dataframe
+
+hr$Ymdhms <- strptime(hr$Time, "%m/%d/%Y %I:%M:%S %p")
+
+hr$Ymd <- format(hr$Ymdhms, "%Y-%m-%d")
+hr$hms <- format(hr$Ymdhms, "%H:%M:%S")
+head(hr)
+
+#2. for hourlyIntensities dataframe
+
+hourlyIntensities$Ymdhms <- strptime(hourlyIntensities$ActivityHour, "%m/%d/%Y %I:%M:%S %p")
+
+hourlyIntensities$Ymd <- format(hourlyIntensities$Ymdhms, "%Y-%m-%d")
+hourlyIntensities$hms <- format(hourlyIntensities$Ymdhms, "%H:%M:%S")
+head(hourlyIntensities)
+
+#3. for dailySleep dataframe
+
+dailySleep$Ymdhms <- strptime(dailySleep$SleepDay, "%m/%d/%Y %I:%M:%S %p")
+
+dailySleep$Ymd <- format(dailySleep$Ymdhms, "%Y-%m-%d")
+dailySleep$hms <- format(dailySleep$Ymdhms, "%H:%M:%S")
+head(dailySleep)
+
+head(weightLog)
+#4. for weightLog dataframe
+
+weightLog$Ymdhms <- strptime(weightLog$Date, "%m/%d/%Y %I:%M:%S %p")
+
+weightLog$Ymd <- format(weightLog$Ymdhms, "%Y-%m-%d")
+weightLog$hms <- format(weightLog$Ymdhms, "%H:%M:%S")
+head(weightLog)
+
+#5. for hourly_Step data frame 
+
+hourly_step$Ymdhms <- strptime(hourly_step$ActivityHour, "%m/%d/%Y %I:%M:%S %p")
+
+hourly_step$Ymd <- format(hourly_step$Ymdhms, "%Y-%m-%d")
+hourly_step$hms <- format(hourly_step$Ymdhms, "%H:%M:%S")
+head(hourly_step)
+
+
+###Analyzing data 
+
+
+
+# df_merged<-list(dailyActivity,dailySleep,weightLog)
+# df_merged %>% reduce(full_join, by='Id')
+# #merged_data1 <- merge(dailyActivity,dailySleep,by = c("Id"), all=TRUE)
+# #merged_data2 <- merge(merged_data1, weightLog, by = c("Id"), all=TRUE)
+# View(df_merged)
+# df_merged$Weekday <- factor(df_merged$Weekday, levels= c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+# 
+# df_merged[order(df_merged$Weekday) ]
+
+##Merging data frames which have same column "ID" for ease & better analysis
+
+merged1 <- merge(dailyActivity,dailySleep,by = c("Id"), all=TRUE)
+merged_data <- merge(merged1, weightLog, by = c("Id"), all=TRUE)
+
+#Order from Monday to Sunday for plot later
+
+merged_data$Weekday <- factor(merged_data$Weekday, levels= c("Monday", 
+                                                             "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+
+
+# write_csv(df_merged, "df_merged.csv")
+#Save CSV for Tableau presentation
+write_csv(merged_data, "merged_data.csv")
+
+
+##Check for NA and duplicates in merged data. 
+
+sum(is.na(merged_data))
+merged_data %>% select_if(~ !any(is.na(.)))
+sum(duplicated(merged_data))
+n_distinct(merged_data$Id) #33
+
+#Check to see if all users are unique.We supposed to have 30 users or 30 IDs. So We have 3 extra from daily activity, 6 less from the sleep day table, and 22 less from the weight table. 
+#16 less than in heart rate table , 3 greater from hourlyIntensities table , 33 both from calories & hourly_step data frames
+n_distinct(dailyActivity$Id)
+n_distinct(dailySleep$Id)
+n_distinct(weightLog$Id)
+n_distinct(hr$Id)
+n_distinct(hourlyIntensities$Id)
+n_distinct(calories$Id)
+n_distinct(hourly_step$Id)
+n_distinct(hourlyCalories$Id)
+
+#Since weight table only has 8 users enter their information. Let's take a look at how they enter the information. 5 users are manually reporting the weight and 3 users are reporting it with a connected device - wifi connected scale. 
+
+weightLog %>% 
+  filter(IsManualReport == "True") %>% 
+  group_by(Id) %>% 
+  summarise("Manual Weight Report"=n()) %>%
+  distinct()
+colnames(weightLog)
+
+## Summarizing key elements
+#dailyActivity
+
+dailyActivity %>%  
+  select(TotalSteps, SedentaryMinutes, Calories) %>%
+  summary()
+
+# explore num of active minutes per category
+
+dailyActivity %>%
+  select(VeryActiveMinutes, FairlyActiveMinutes, LightlyActiveMinutes) %>%
+  summary()
+
+# explore dailySleep
+
+dailySleep %>%
+  select(TotalSleepRecords,TotalMinutesAsleep,TotalTimeInBed) %>%
+  summary()
+
+# explore weightLog
+
+weightLog %>%
+  select(WeightKg,WeightPounds,BMI) %>%
+  summary()
+
+# explore hourlyIntensities table( data frame)
+
+hourlyIntensities %>%
+  select(TotalIntensity,AverageIntensity) %>%
+  summary()
+
+# explore calories table( data frame)
+
+calories %>%
+  select(Calories) %>%
+  summary()
+
+# explore hourly_step table( data frame)
+
+hourly_step %>%
+  select(StepTotal) %>%
+  summary()
+
+
+
+### Proceeding for Data Visualization 
+
+#Visualizing graph between Total active minutes vs Calories burnt 
+
+dailyActivity %>% 
+  mutate(TotalActiveMinutes = VeryActiveMinutes+FairlyActiveMinutes+LightlyActiveMinutes) %>% 
+  ggplot()+geom_point(mapping=aes(x=TotalActiveMinutes, y=Calories))+
+  geom_smooth(mapping=aes(x=TotalActiveMinutes, y=Calories))+
+  labs(title="Total Active Time vs Calories Burned")
+
+#Very Intense Activity vs Calories Burned
+
+dailyActivity %>% 
+  group_by(Ymd) %>% 
+  summarize(MeanVeryActive=mean(VeryActiveMinutes), MeanCalories=mean(Calories)) %>% 
+  ggplot()+geom_line(mapping=aes(x=MeanVeryActive, y=MeanCalories))+
+  labs(title="Very Intense Activity vs Calories Burned")
+
+#Moderately Intense Activity vs Calories Burned per day
+
+dailyActivity %>% 
+  group_by(Ymd) %>% 
+  summarize(MeanFairlyActive=mean(FairlyActiveMinutes), MeanCalories=mean(Calories)) %>% 
+  ggplot()+geom_line(mapping=aes(x=MeanFairlyActive, y=MeanCalories))+
+  labs(title="Moderate Activity vs Calories Burned")
+
+#Lightly Intense Activity vs Calories Burned per day
+
+dailyActivity %>% 
+  group_by(Ymd) %>% 
+  summarize(MeanLightlyActive=mean(LightlyActiveMinutes), MeanCalories=mean(Calories)) %>% 
+  ggplot()+geom_line(mapping=aes(x=MeanLightlyActive, y=MeanCalories))+
+  labs(title="Light Activity vs Calories Burned")
+
+#Total Distance vs Total Calories Burned per participant per day
+
+dailyActivity %>%  
+  group_by(Ymd,Id) %>% 
+  summarize(TotalCalories=sum(Calories), distance=sum(TotalDistance)) %>% 
+  ggplot()+ geom_point(aes(x=distance, y=TotalCalories, color=Ymd))+
+  geom_smooth(aes(x=distance, y=TotalCalories))+
+  labs(title="Total Distance vs Calories Burned", subtitle ="Sample of the Thirty Three Participants")
+
+
+#Observation of data on weekdays for data capturing
+
+ggplot(data=merged_data, aes(x=Weekday))+
+  geom_bar(fill="steelblue")+
+  labs(title="Data Recording During the Week")
+
+
+#Weekly
+ggplot(data=merged_data, aes(x=Weekday, y=TotalSteps, fill=Weekday))+ 
+  geom_bar(stat="identity", fill="steelblue")+
+  labs(title="More Steps on Saturday", y="Total Steps")
+
+ggplot(data=merged_data, aes(x=Weekday, y=Calories, fill=Weekday))+ 
+  geom_bar(stat="identity", fill="gold")
+
+ggplot(data=merged_data, aes(x=Weekday, y=TotalMinutesAsleep, fill=Weekday))+ 
+  geom_bar(stat="identity", fill="steelblue")+
+  labs(title="Total Minutes Asleep During the Week", y="Total Minutes Asleep")
+
+ggplot(data=merged_data, aes(x=Weekday, y=SedentaryMinutes, fill=Weekday))+ 
+  geom_bar(stat="identity", fill="steelblue")+
+  labs(title="Less Sedentary Minutes on Saturday", y="Sedentary Minutes")
+
+ggplot(data=merged_data, aes(x=Weekday, y=TotalDistance, fill=Weekday))+ 
+  geom_bar(stat="identity")
+
+
+dailyActivity %>%
+  dplyr::select(TotalSteps,
+                TotalDistance,
+                VeryActiveMinutes,
+                FairlyActiveMinutes,
+                LightlyActiveMinutes,
+                SedentaryMinutes,
+                Calories) %>%
+  summary()
+
+dailySleep %>%  
+  dplyr::select(TotalSleepRecords,
+                TotalMinutesAsleep,
+                TotalTimeInBed) %>%
+  summary()
+
+#Optional for merged data
+merged_data %>%
+  dplyr::select(Weekday,
+                TotalSteps,
+                TotalDistance,
+                VeryActiveMinutes,
+                FairlyActiveMinutes,
+                LightlyActiveMinutes,
+                SedentaryMinutes,
+                Calories,
+                TotalMinutesAsleep,
+                TotalTimeInBed,
+                WeightPounds,
+                BMI
+  ) %>%
+  summary()
+
+#Active users
+active_users <- dailyActivity %>%
+  filter(FairlyActiveMinutes >= 21.4 | VeryActiveMinutes>=10.7) %>% 
+  group_by(Id) %>% 
+  count(Id)
+head(active_users)
+
+
+# Interesting find here that some user who are sedentary, takes minimal step, but still able to burn over 1500 to 2500 calories
+ggplot(data=dailyActivity, aes(x=TotalSteps, y = Calories, color=SedentaryMinutes))+ 
+  geom_point()+ 
+  labs(title="Total Steps vs Calories")+
+  xlab("Total Steps")+
+  stat_smooth(method=lm)+
+  scale_color_gradient(low="orange", high="steelblue")
+# Users who take more steps, burn more calories and has lower BMI. We also see some outliers in the top left corner. 
+ggplot(data=merged_data, aes(x=TotalSteps, y = BMI, color=Calories))+ 
+  geom_point()+ 
+  stat_smooth(method=lm)+
+  scale_color_gradient(low="blue", high="yellow")
+
+
+#To evaluate the relationship between sleep and physical activity, we will combine the the daily activity data and the sleep data using the merge() function:
+
+dailyActivitywithSleep = merge(x=dailyActivity, y=dailySleep, by=c("Id", "Ymd"), all=TRUE)
+head(dailyActivitywithSleep)
+sum(is.na(dailyActivitywithSleep))
+
+#visualizing the relationship between sleep and calories burned:
+dailyActivitywithSleep %>% 
+  group_by(Id) %>% 
+  drop_na() %>% 
+  summarize(total_calories=sum(Calories), total_sleep=sum(TotalMinutesAsleep)) %>% 
+  ggplot()+geom_point(aes(x=total_calories, y=total_sleep))+
+  geom_smooth(aes(x=total_calories, y=total_sleep))
+
+#From above visualization we find, the more calories one burned the longer they slept. For better sleep, the CDC recommends getting some exercise because being physically active during the day helps one fall asleep easily in the night.
+
+#summarizing our data to show the daily mean heart rate of each participant using the summarize() function:
+
+heart_rate_evaluation<- (hr %>% group_by(Ymd, Id) %>% 
+                    drop_na() %>% 
+                    summarize(mean_heartrate=mean(Value)))
+head(heart_rate_evaluation)
+
+# evaluating the relationship between heart_rate and physical activity, by combining daily=Activity data with the summarized heart rate data using the merge():
+heart_rate = merge(x=dailyActivity, y=heart_rate_evaluation, by=c("Id", "Ymd"), all=TRUE)
+head(heart_rate)
+
+# visualizing the relationship between the heart rate and Total Steps
+
+heart_rate %>% 
+  drop_na() %>% 
+  ggplot()+ geom_point(aes(x=mean_heartrate, y=TotalSteps))+
+  geom_smooth(aes(x=mean_heartrate, y=TotalSteps))+
+  labs(title="Mean Heart Rate vs Total Steps", subtitle="Relationship between the Mean Heart Rate and Total Steps")
+
+#The American Heart Association defines normal resting adult human heart rate as 60 to 100 beats per minute, and tachycardia, high heart rate, at over 100 beats per minute at rest. Exercise strengthens one's heart. 
+#During exercise, the heart pumps more blood with each heart beat and does not need to pump as hard - which lowers heart rate. This plot is according to the scientific facts .
+
+#evaluating the relationship between heart Rate evaluation and sleep levels. We will combine the sleep data and the summarized heart rate evaluation data using the merge() function:
+
+sleep_levels = merge(x=dailySleep, y=heart_rate_evaluation, by=c("Id", "Ymd"), all=TRUE)
+
+#visualize the relationship between the heart rate and sleeping time
+
+sleep_levels %>% 
+  drop_na() %>% 
+  ggplot()+ geom_point(aes(x=mean_heartrate, y=TotalMinutesAsleep))+
+  geom_smooth(aes(x=mean_heartrate, y=TotalMinutesAsleep))+
+  labs(title="Mean Heart Rate vs Total Sleeping Time", subtitle="Relationship between the Mean Heart Rate and Total Sleeping Time")
+#From the above visualization we find that that the lower the heart rate, the more the sleeping time. According to the American Heart Association, one's heart beat may fall to 60 beats per minute during sleep. This is normal. Notably, participants with high heart rates got less sleeping time.
+
+# Comparing hourlyIntensities vs Time
+intensity_new <- hourlyIntensities %>%
+  group_by(ActivityHour) %>%
+  drop_na() %>%
+  summarise(mean_total_intensity = mean(TotalIntensity))
+write_csv(intensity_new, "intensity_new.csv")
+glimpse(hourlyIntensities)
+ggplot(data=intensity_new, aes(x=ActivityHour, y=mean_total_intensity)) + geom_histogram(bins = 100,binwidth = 20, stat = "identity", fill="dark green")+
+  labs(title="Average Total Intensity vs Time", x="Time", y="Average Intensity")
+
+
+
+
+rm(calorie_new)
+
+#Plotting Average Calories burned at specific hours of of day
+
+calorie_new <- hourlyCalories%>%
+  group_by(time) %>%
+  drop_na() %>%
+  summarise(mean_calories = mean(Calories))
+
+ggplot(data=calorie_new, aes(x=time, y= mean_calories)) + 
+  geom_histogram(stat = "identity", fill="dark green")  +
+  labs(title="Average Calories vs. Time", x="Time", y="Calories")
+
