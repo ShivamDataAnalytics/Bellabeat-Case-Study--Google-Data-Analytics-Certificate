@@ -309,21 +309,21 @@ sleep_levels %>%
 
 # Trends Identify
 
-The average Total Steps per day for participants was 8053, over 2000 steps below the necessary minimum.
-In a month, participants spent 79% of their time sedentary.
-The participants averaged 25.19 BMI, which is overweight.
-On average, participants slept less than the recommended 7 hours.
-The participants weren’t consistent with logging/tracking their data each day, and some didn’t log/track their sleep or weight (only 24 unique users for sleep and eight for weight — where only two of these eight were made up the majority of the inputs).
-Participants didn’t lose weight, improve BMI or sleep quality, or increase exercise levels.
+1) The average Total Steps per day for participants was 8053, over 2000 steps below the necessary minimum.
+2) In a month, participants spent 79% of their time sedentary.
+3) The participants averaged 25.19 BMI, which is overweight.
+4) On average, participants slept less than the recommended 7 hours.
+5) The participants weren’t consistent with logging/tracking their data each day, and some didn’t log/track their sleep or weight (only 24 unique users for sleep and eight for weight — where only two of these eight were made up the majority of the inputs).
+6) Participants didn’t lose weight, improve BMI or sleep quality, or increase exercise levels.
 
 
 # Recommendations (Act)
 
 
-Bellabeat should enable in-app tournaments against friends or users in the same city/state to encourage continuous tracking.
-Bellabeat could offer rewards or points redeemable for merchandise, discounts on future products, in-app features, or raffle tickets.
-Bellabeat may give extra incentives (i.e., points) from Friday-Monday when many people lose interest and motivation.
-Bellabeat goods should offer a TDEE calculator so consumers may input their sex, age, weight, height, and other information for accurate results.
+-> Bellabeat should enable in-app tournaments against friends or users in the same city/state to encourage continuous tracking.
+-> Bellabeat could offer rewards or points redeemable for merchandise, discounts on future products, in-app features, or raffle tickets.
+-> Bellabeat may give extra incentives (i.e., points) from Friday-Monday when many people lose interest and motivation.
+-> Bellabeat goods should offer a TDEE calculator so consumers may input their sex, age, weight, height, and other information for accurate results.
 
 Marketing recommendations to expand globally:
 
