@@ -307,3 +307,27 @@ sleep_levels %>%
   
 #From the above visualization we find that that the lower the heart rate, the more the sleeping time. According to the American Heart Association, one's heart beat may fall to 60 beats per minute during sleep. This is normal. Notably, participants with high heart rates got less sleeping time.
 
+# Trends Identify
+
+The average Total Steps per day for participants was 8053, over 2000 steps below the necessary minimum.
+In a month, participants spent 79% of their time sedentary.
+The participants averaged 25.19 BMI, which is overweight.
+On average, participants slept less than the recommended 7 hours.
+The participants weren’t consistent with logging/tracking their data each day, and some didn’t log/track their sleep or weight (only 24 unique users for sleep and eight for weight — where only two of these eight were made up the majority of the inputs).
+Participants didn’t lose weight, improve BMI or sleep quality, or increase exercise levels.
+
+
+# Recommendations (Act)
+
+
+Bellabeat should enable in-app tournaments against friends or users in the same city/state to encourage continuous tracking.
+Bellabeat could offer rewards or points redeemable for merchandise, discounts on future products, in-app features, or raffle tickets.
+Bellabeat may give extra incentives (i.e., points) from Friday-Monday when many people lose interest and motivation.
+Bellabeat goods should offer a TDEE calculator so consumers may input their sex, age, weight, height, and other information for accurate results.
+
+Marketing recommendations to expand globally:
+
+🔢 Obtain more data for an accurate analysis, encouraging users to use a wifi-connected scale instead of manual weight entries.
+🚲 Educational healthy style campaign encourages users to have short active exercises during the week, longer during the weekends, especially on Sunday where we see the lowest steps and most sedentary minutes.
+🎁 Educational healthy style campaign can pair with a point-award incentive system. Users completing the whole week's exercise will receive Bellabeat points on products/memberships.
+🏃‍♂️ The product, such as Leaf wellness tracker, can beat or vibrate after a prolonged period of sedentary minutes, signaling the user it's time to get active! Similarly, it can also remind the user it's time to sleep after sensing a prolonged awake time in bed.
